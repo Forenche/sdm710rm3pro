@@ -124,6 +124,7 @@ recordmcount()
 	if [ -n "${CONFIG_FTRACE_MCOUNT_RECORD}" ]; then
 		scripts/recordmcount ${RECORDMCOUNT_FLAGS} $*
 	fi
+	${LDFINAL} ${LDFLAGS} -r -o ${1} ${objects}
 }
 
 # Link of vmlinux
@@ -153,7 +154,8 @@ vmlinux_link()
 				${1}"
 		fi
 
-		${ld} ${ldflags} -o ${2} -T ${lds} ${objects}
+		${LDFINAL} ${LDFLAGS} ${LDFLAGS_vmlinux} -o ${2}	\
+			-T ${lds} ${objects}
 	else
 		if [ -n "${CONFIG_THIN_ARCHIVES}" ]; then
 			objects="-Wl,--whole-archive built-in.o ${1}"
