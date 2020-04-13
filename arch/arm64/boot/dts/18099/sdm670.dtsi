@@ -1,4 +1,4 @@
-/* Copyright (c) 2017-2019, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2017-2018, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -36,15 +36,12 @@
 		sdhc1 = &sdhc_1; /* SDC1 eMMC slot */
 		sdhc2 = &sdhc_2; /* SDC2 SD Card slot */
 		serial0 = &qupv3_se12_2uart;
-		/* #ifndef VENDOR_EDIT */
-		/* Jianfeng.Qiu@PSW.MM.AudioDriver.Machine, 2018/04/18, Delete for audio */
-		//spi0 = &qupv3_se8_spi;
-		/* #endif VENDOR_EDIT */
+		spi0 = &qupv3_se8_spi;
 		i2c0 = &qupv3_se10_i2c;
 		i2c1 = &qupv3_se3_i2c;
 		/* #ifdef VENDOR_EDIT */
 		/* Jianfeng.Qiu@PSW.MM.AudioDriver.Codec, 2018/07/05, Add for audio codec i2c */
-		i2c2 = &qupv3_se0_i2c;
+		i2c2 = &qupv3_se4_i2c;
 		/* #endif VENDOR_EDIT */
 		hsuart0 = &qupv3_se6_4uart;
 	};
@@ -364,7 +361,7 @@
 				1708800   139
 			>;
 			idle-cost-data = <
-				12 10 8 6 4
+				12 10 8 6
 			>;
 		};
 		CPU_COST_1: core-cost1 {
@@ -383,7 +380,6 @@
 				2054400    876
 				2169600    900
 				2208000    924
-				2304000    940
 				2361600    948
 				2400000   1170
 				2457600   1200
@@ -391,12 +387,12 @@
 				2611200   1400
 			>;
 			idle-cost-data = <
-				100 80 60 40 20
+				100 80 60 40
 			>;
 		};
 		CLUSTER_COST_0: cluster-cost0 {
 			busy-cost-data = <
-				 300000    6
+				 300000    5
 				 576000    7
 				 748800    8
 				 998400    9
@@ -407,7 +403,7 @@
 				1708800   19
 			>;
 			idle-cost-data = <
-				5 4 3 2 1
+				4 3 2 1
 			>;
 		};
 		CLUSTER_COST_1: cluster-cost1 {
@@ -426,7 +422,6 @@
 				2054400    87
 				2169600    90
 				2208000    92
-				2304000    93
 				2361600    94
 				2400000   117
 				2457600   120
@@ -434,7 +429,7 @@
 				2611200   140
 			>;
 			idle-cost-data = <
-				5 4 3 2 1
+				4 3 2 1
 			>;
 		};
 	};
@@ -466,26 +461,19 @@
 				// #endif
 			};
 
-#ifndef CONFIG_DYNAMIC_PARTITION_ENABLE //#Haoran.Zhang@PSW.Tech.2221709,2019/08/07,reomve for logic vendor partition .todo,should use micro
 			fstab {
 				compatible = "android,fstab";
 				vendor {
 					compatible = "android,vendor";
 					dev = "/dev/block/platform/soc/1d84000.ufshc/by-name/vendor";
 					type = "ext4";
-/*#if defined(VENDOR_EDIT) && defined(CONFIG_EXT4_ASYNC_DISCARD_SUPPORT)*/
-/*yh@PSW.BSP.Storage.EXT4, 2018-11-26 add for ext4 async discard suppot*/
-					mnt_flags = "ro,barrier=1,async_discard";
-/*#else*/
-					/*mnt_flags = "ro,barrier=1,discard";*/
-/*#endif*/
+					mnt_flags = "ro,barrier=1,discard";
 					// #ifdef VENDOR_EDIT
 					// #Wanghao@BSP.Bootloader.Bootflow, 2018/04/26, add to disable A/B partition
 					fsmgr_flags = "wait";
 					// #endif
 				};
 			};
-#endif
 		};
 	};
 
@@ -543,45 +531,7 @@
 			no-map;
 			reg = <0 0x94B00000 0 0x100000>;
 		};
-// #ifdef VENDOR_EDIT
-// luhongyu@BSP.Fingerprint.Secure 2018/12/26, add for secure dsp
-		pil_cdsp_mem: cdsp_regions@94c00000 {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0x94c00000 0 0x1e00000>;
-		};
 
-		pil_mba_mem: pil_mba_region@0x96a00000 {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0x96a00000 0 0x200000>;
-		};
-
-		pil_adsp_mem: pil_adsp_region@0x96c00000 {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0x96c00000 0 0x1e00000>;
-		};
-
-		pil_ipa_fw_mem: ips_fw_region@0x98a00000 {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0x98a00000 0 0x10000>;
-		};
-
-		pil_ipa_gsi_mem: ipa_gsi_region@0x98a10000 {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0x98a10000 0 0x5000>;
-		};
-
-		pil_gpu_mem: gpu_region@0x98a15000 {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0x98a15000 0 0x2000>;
-		};
-// #else
-/********
 		pil_cdsp_mem: cdsp_regions@94C00000 {
 			compatible = "removed-dma-pool";
 			no-map;
@@ -617,8 +567,7 @@
 			no-map;
 			reg = <0 0x97415000 0 0x2000>;
 		};
-*********/
-// #endif VENDOR_EDIT
+
 		qseecom_mem: qseecom_region@0x9e400000 {
 			compatible = "shared-dma-pool";
 			no-map;
@@ -695,20 +644,17 @@
 */
 //#endif /* VENDOR_EDIT */
 
-		/* #ifdef VENDOR_EDIT */
-		/* luhongyu@BSP.Fingerprint.Secure 2018/12/26, add for secure dsp */
-		secure_dsp_mem: secure_dsp_region {
-			compatible = "removed-dma-pool";
-			no-map;
-			reg = <0 0xa7800000 0 0xc00000>;
-		};
-		/* #endif VENDOR_EDIT */
 		adsp_mem: adsp_region {
 			compatible = "shared-dma-pool";
 			alloc-ranges = <0 0x00000000 0 0xffffffff>;
 			reusable;
 			alignment = <0 0x400000>;
-			size = <0 0x800000>;
+			//#ifndef VENDOR_EDIT
+			/* Jianfeng.Qiu@PSW.MM.AudioDriver.ADSP.1585178, 2018/11/15, Modify for increase 4M, change to 12MB */
+			//size = <0 0x800000>;
+			//#else /* VENDOR_EDIT */
+			size = <0 0xc00000>;
+			//#endif /* VENDOR_EDIT */
 		};
 
 		sdsp_mem: sdsp_region {
@@ -744,13 +690,8 @@
 		};
 
 		cont_splash_memory: cont_splash_region@9c000000 {
-			reg = <0x0 0x9c000000 0x0 0x2300000>;
+			reg = <0x0 0x9c000000 0x0 0x02400000>;
 			label = "cont_splash_region";
-		};
-
-		dfps_data_memory: dfps_data_region@9e300000 {
-			reg = <0x0 0x9e300000 0x0 0x0100000>;
-			label = "dfps_data_region";
 		};
 
 		dump_mem: mem_dump_region {
@@ -812,7 +753,7 @@
 		clocks = <&clock_aop QDSS_CLK>;
 		clock-names = "core_clk";
 
-		qcom,coresight-jtagmm-cpu = <&CPU1>;
+		qom,coresight-jtagmm-cpu = <&CPU1>;
 	};
 
 	jtag_mm2: jtagmm@7240000 {
@@ -2042,10 +1983,6 @@
 		ufs-qcom-crypto = <&ufs_ice>;
 
 		lanes-per-direction = <1>;
-	//#ifdef VENDOR_EDIT
-	//PengNan@BSP.Power.Basic,remove ufs and emmc compatibility for standby current, 2019/07/30
-	//	spm-level = <5>;
-	//#endif /*VENDOR_EDIT*/
 		dev-ref-clk-freq = <0>; /* 19.2 MHz */
 
 		clock-names =
@@ -2059,12 +1996,7 @@
 			"rx_lane0_sync_clk";
 		clocks =
 			<&clock_gcc GCC_UFS_PHY_AXI_HW_CTL_CLK>,
-		//#ifndef VENDOR_EDIT
-		//PengNan@BSP.Power.Basic,remove ufs and emmc compatibility for standby current, 2019/07/30
-		//	<&clock_gcc UFS_PHY_AXI_UFS_VOTE_CLK>,
-		//#else
 			<&clock_gcc GCC_AGGRE_UFS_PHY_AXI_HW_CTL_CLK>,
-		//#endif
 			<&clock_gcc GCC_UFS_PHY_AHB_CLK>,
 			<&clock_gcc GCC_UFS_PHY_UNIPRO_CORE_HW_CTL_CLK>,
 			<&clock_gcc GCC_UFS_PHY_ICE_CORE_HW_CTL_CLK>,
@@ -2183,7 +2115,7 @@
         reg = <0x0 0x00100000>;
         reg-names = "oembackup";
         qcom,client-id = <0x00000004>;
-        qcom,guard-memory;
+		qcom,guard-memory;
     };
     //#endif /* FEATURE_OPPO_NV_BACKUP */
     //#endif /* VENDOR_EDIT */
@@ -2405,7 +2337,6 @@
 		vdd_mss-uV = <RPMH_REGULATOR_LEVEL_TURBO>;
 		qcom,firmware-name = "modem";
 		qcom,pil-self-auth;
-		qcom,sequential-fw-load;
 		qcom,sysmon-id = <0>;
 		qcom,minidump-id = <3>;
 		qcom,ssctl-instance-id = <0x12>;
@@ -2583,12 +2514,7 @@
 		clocks = <&clock_gcc GCC_SDCC1_AHB_CLK>,
 			<&clock_gcc GCC_SDCC1_APPS_CLK>,
 			<&clock_gcc GCC_SDCC1_ICE_CORE_CLK>,
-		//#ifndef VENDOR_EDIT
-		//PengNan@BSP.Power.Basic,remove ufs and emmc compatibility for standby current, 2019/07/30
-		//	<&clock_gcc UFS_PHY_AXI_EMMC_VOTE_CLK>;
-		//#else
 			<&clock_gcc GCC_AGGRE_UFS_PHY_AXI_CLK>;
-		//#endif
 		clock-names = "iface_clk", "core_clk", "ice_core_clk",
 			"bus_aggr_clk";
 
@@ -2681,75 +2607,75 @@
 		qcom,fastrpc-adsp-audio-pdr;
 		qcom,fastrpc-adsp-sensors-pdr;
 
-		msm_fastrpc_compute_cb1: qcom,msm_fastrpc_compute_cb1 {
+		qcom,msm_fastrpc_compute_cb1 {
 			compatible = "qcom,msm-fastrpc-compute-cb";
 			label = "cdsprpc-smd";
 			iommus = <&apps_smmu 0x1421 0x30>;
 			dma-coherent;
 		};
-		msm_fastrpc_compute_cb2: qcom,msm_fastrpc_compute_cb2 {
+		qcom,msm_fastrpc_compute_cb2 {
 			compatible = "qcom,msm-fastrpc-compute-cb";
 			label = "cdsprpc-smd";
 			iommus = <&apps_smmu 0x1422 0x30>;
 			dma-coherent;
 		};
-		msm_fastrpc_compute_cb3: qcom,msm_fastrpc_compute_cb3 {
+		qcom,msm_fastrpc_compute_cb3 {
 			compatible = "qcom,msm-fastrpc-compute-cb";
 			label = "cdsprpc-smd";
 			iommus = <&apps_smmu 0x1423 0x30>;
 			dma-coherent;
 		};
-		msm_fastrpc_compute_cb4: qcom,msm_fastrpc_compute_cb4 {
+		qcom,msm_fastrpc_compute_cb4 {
 			compatible = "qcom,msm-fastrpc-compute-cb";
 			label = "cdsprpc-smd";
 			iommus = <&apps_smmu 0x1424 0x30>;
 			dma-coherent;
 		};
-		msm_fastrpc_compute_cb5: qcom,msm_fastrpc_compute_cb5 {
+		qcom,msm_fastrpc_compute_cb5 {
 			compatible = "qcom,msm-fastrpc-compute-cb";
 			label = "cdsprpc-smd";
 			iommus = <&apps_smmu 0x1425 0x30>;
 			dma-coherent;
 		};
-		msm_fastrpc_compute_cb6: qcom,msm_fastrpc_compute_cb6 {
+		qcom,msm_fastrpc_compute_cb6 {
 			compatible = "qcom,msm-fastrpc-compute-cb";
 			label = "cdsprpc-smd";
 			iommus = <&apps_smmu 0x1426 0x30>;
 			dma-coherent;
 		};
-		msm_fastrpc_compute_cb7: qcom,msm_fastrpc_compute_cb7 {
+		qcom,msm_fastrpc_compute_cb7 {
 			compatible = "qcom,msm-fastrpc-compute-cb";
 			label = "cdsprpc-smd";
 			qcom,secure-context-bank;
 			iommus = <&apps_smmu 0x1429 0x30>;
 			dma-coherent;
 		};
-		msm_fastrpc_compute_cb8: qcom,msm_fastrpc_compute_cb8 {
+		qcom,msm_fastrpc_compute_cb8 {
 			compatible = "qcom,msm-fastrpc-compute-cb";
 			label = "cdsprpc-smd";
 			qcom,secure-context-bank;
 			iommus = <&apps_smmu 0x142A 0x30>;
 			dma-coherent;
 		};
-		msm_fastrpc_compute_cb9: qcom,msm_fastrpc_compute_cb9 {
+		qcom,msm_fastrpc_compute_cb9 {
 			compatible = "qcom,msm-fastrpc-compute-cb";
 			label = "adsprpc-smd";
 			iommus = <&apps_smmu 0x1803 0x0>;
 			dma-coherent;
 		};
-		msm_fastrpc_compute_cb10: qcom,msm_fastrpc_compute_cb10 {
+		qcom,msm_fastrpc_compute_cb10 {
 			compatible = "qcom,msm-fastrpc-compute-cb";
 			label = "adsprpc-smd";
 			iommus = <&apps_smmu 0x1804 0x0>;
 			dma-coherent;
 		};
-		msm_fastrpc_compute_cb11: qcom,msm_fastrpc_compute_cb11 {
+		qcom,msm_fastrpc_compute_cb11 {
 			compatible = "qcom,msm-fastrpc-compute-cb";
 			label = "adsprpc-smd";
 			iommus = <&apps_smmu 0x1805 0x0>;
 			dma-coherent;
 		};
-		msm_fastrpc_compute_cb12: qcom,msm_fastrpc_compute_cb12 {
+		qcom,msm_fastrpc_compute_cb12 {
 			compatible = "qcom,msm-fastrpc-compute-cb";
 			label = "adsprpc-smd";
 			iommus = <&apps_smmu 0x1806 0x0>;
@@ -2802,7 +2728,6 @@
 		qcom,gpio-force-fatal-error = <&smp2pgpio_wlan_1_in 0 0>;
 		qcom,gpio-early-crash-ind = <&smp2pgpio_wlan_1_in 1 0>;
 		qcom,smmu-s1-bypass;
-		#cooling-cells = <2>;
 	};
 
 	cpubw: qcom,cpubw {
