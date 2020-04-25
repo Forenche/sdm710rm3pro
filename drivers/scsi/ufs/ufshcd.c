@@ -2301,11 +2301,6 @@ static ssize_t ufshcd_hibern8_on_idle_enable_store(struct device *dev,
 
 update:
 	hba->hibern8_on_idle.is_enabled = value;
-	*buf_len = be16_to_cpu(response->upiu_res.length);
-
-out_unlock:
-	hba->dev_cmd.query.descriptor = NULL;
-	mutex_unlock(&hba->dev_cmd.lock);
 out:
 	return count;
 }
@@ -10464,10 +10459,6 @@ static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
 
 	ret = ufshcd_clock_scaling_prepare(hba);
 	if (ret)
-	if (!hba->is_powered)
-		goto out;
-
-	if (ufshcd_is_ufs_dev_poweroff(hba) && ufshcd_is_link_off(hba))
 		goto out;
 
 	ufshcd_custom_cmd_log(hba, "waited-for-DB-clear");
@@ -11009,3 +11000,4 @@ MODULE_AUTHOR("Vinayak Holikatti <h.vinayak@samsung.com>");
 MODULE_DESCRIPTION("Generic UFS host controller driver Core");
 MODULE_LICENSE("GPL");
 MODULE_VERSION(UFSHCD_DRIVER_VERSION);
+
