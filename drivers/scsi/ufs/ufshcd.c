@@ -2301,6 +2301,11 @@ static ssize_t ufshcd_hibern8_on_idle_enable_store(struct device *dev,
 
 update:
 	hba->hibern8_on_idle.is_enabled = value;
+	*buf_len = be16_to_cpu(response->upiu_res.length);
+
+out_unlock:
+	hba->dev_cmd.query.descriptor = NULL;
+	mutex_unlock(&hba->dev_cmd.lock);
 out:
 	return count;
 }
