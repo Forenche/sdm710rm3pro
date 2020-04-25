@@ -10459,6 +10459,10 @@ static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
 
 	ret = ufshcd_clock_scaling_prepare(hba);
 	if (ret)
+	if (!hba->is_powered)
+		goto out;
+
+	if (ufshcd_is_ufs_dev_poweroff(hba) && ufshcd_is_link_off(hba))
 		goto out;
 
 	ufshcd_custom_cmd_log(hba, "waited-for-DB-clear");

@@ -823,6 +823,10 @@ static int uas_slave_alloc(struct scsi_device *sdev)
 	blk_queue_virt_boundary(sdev->request_queue, maxp - 1);
 #endif
 	/*
+
+	sdev->hostdata = devinfo;
+
+	/*
 	 * The protocol has no requirements on alignment in the strict sense.
 	 * Controllers may or may not have alignment restrictions.
 	 * As this is not exported, we use an extremely conservative guess.
