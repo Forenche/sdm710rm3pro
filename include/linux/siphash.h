@@ -21,7 +21,6 @@ typedef struct {
 	u64 key[2];
 } siphash_key_t;
 
-=======
 static inline bool siphash_key_is_zero(const siphash_key_t *key)
 {
 	return !(key->key[0] | key->key[1]);
