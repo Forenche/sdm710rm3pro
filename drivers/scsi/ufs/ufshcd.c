@@ -8879,9 +8879,11 @@ out:
 
 static int ufshcd_init_vreg(struct ufs_hba *hba)
 {
-	int ret = 0;
-	struct device *dev = hba->dev;
-	struct ufs_vreg_info *info = &hba->vreg_info;
+
+		/* Add required well known logical units to scsi mid layer */
+		ret = ufshcd_scsi_add_wlus(hba);
+		if (ret)
+			goto out;
 
 	if (!info)
 		goto out;
