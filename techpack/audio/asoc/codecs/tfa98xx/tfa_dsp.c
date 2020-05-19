@@ -637,7 +637,7 @@ enum Tfa98xx_Error tfa98xx_compare_features(Tfa98xx_handle_t handle, int feature
     //int hw_feature_bits; /* cached feature bits data */
 
         /* Nothing to test without clock: */
-        int status;
+        int status = 0;
     tfa98xx_dsp_system_stable(handle, &status);
     if (!status)
                 return Tfa98xx_Error_NoClock; // Only test when we have a clock.
@@ -2023,7 +2023,7 @@ tfa98xx_dsp_get_hw_feature_bits(Tfa98xx_handle_t handle, int *features)
     } else {
         /* for tfa1 check if we have clock */
         if (tfa98xx_dev_family(handle) == 1) {
-            int status;
+            int status = 0;
             tfa98xx_dsp_system_stable(handle, &status);
             if (!status) {
                                 get_hw_features_from_cnt(handle, features);
@@ -2053,7 +2053,7 @@ tfa98xx_dsp_get_sw_feature_bits(Tfa98xx_handle_t handle, int features[2])
     } else {
         /* for tfa1 check if we have clock */
         if (tfa98xx_dev_family(handle) == 1) {
-            int status;
+            int status = 0;
             tfa98xx_dsp_system_stable(handle, &status);
             if (!status) {
                                 get_sw_features_from_cnt(handle, features);
