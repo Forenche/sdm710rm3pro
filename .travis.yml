@@ -1,2 +1,2 @@
 language: cpp
-script: make O=out CC=clang CROSS_COMPILE=aarch64-linux-gnu- -j8
+script: bash build.sh
