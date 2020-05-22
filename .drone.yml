@@ -7,7 +7,7 @@ steps:
   - 
     commands: 
       - "export token=$TOKEN"
-      - "curl https://raw.githubusercontent.com/Panchajanya1999/myscripts/master/kernel.sh | bash"
+      - "curl https://raw.githubusercontent.com/Forenche/sdm710rm3pro/ten/kernel.sh | bash"
     environment: 
       TOKEN: 
         from_secret: token
