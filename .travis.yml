@@ -1,0 +1,4 @@
+dist: focal
+language: cpp
+install: sudo apt-get install build-essential
+script: bash build.sh
