@@ -1,1 +1,8 @@
-script: ./build.sh
+
+sudo: required
+language: cpp
+script: git clone https://github.com/kdrag0n/proton-clang toolchain
+script: export PATH="./toolchain/bin:${PATH}"
+script: export ARCH=arm64
+script: make O=out RMX1851_defconfig
+script: make O=out CC=clang CROSS_COMPILE=aarch64-linux-gnu- -j8
