@@ -6,4 +6,13 @@ export ARCH=arm64
 
 make O=out RMX1851_defconfig
 
-make CC=clang CROSS_COMPILE=aarch64-linux-gnu- -j8
+make CROSS_COMPILE=aarch64-linux-gnu- \
+			CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
+			CC=clang \
+			AR=llvm-ar \
+			OBJDUMP=llvm-objdump \
+			STRIP=llvm-strip
+      
+make -j"$PROCS" O=out \
+		NM=llvm-nm \
+		OBJCOPY=llvm-objcopy
