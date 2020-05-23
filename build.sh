@@ -1,6 +1,6 @@
 git clone --depth=1 https://github.com/kdrag0n/proton-clang toolchain
 
-export PATH="/home/travis/build/Blaster4385/sdm710rm3pro/toolchain/bin:${PATH}"
+export PATH="/home/travis/sdm710rm3pro/toolchain/bin:${PATH}"
 
 export ARCH=arm64
 
