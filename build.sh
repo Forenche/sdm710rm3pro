@@ -6,4 +6,4 @@ export ARCH=arm64
 
 make O=out RMX1851_defconfig
 
-make O=out CC=clang CROSS_COMPILE=aarch64-linux-gnu- -j8
+make CC=clang CROSS_COMPILE=aarch64-linux-gnu- -j8
