@@ -13,6 +13,6 @@ make CROSS_COMPILE=aarch64-linux-gnu- \
 			OBJDUMP=llvm-objdump \
 			STRIP=llvm-strip
       
-make -j"$PROCS" O=out \
+make -j8 O=out \
 		NM=llvm-nm \
 		OBJCOPY=llvm-objcopy
